@@ -9,45 +9,6 @@
  * License: GPL2
  */
 
-function get_external_rss_data() {
-
-	// Get RSS Feed(s)
-	include_once( ABSPATH . WPINC . '/feed.php' );
-
-	// Get a SimplePie feed object from the specified feed source.
-	$rss = fetch_feed( 'http://blog.nationalarchives.gov.uk/feed/' );
-
-	$maxitems = 0;
-
-	if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
-
-		// Figure out how many total items there are, but limit it to 5.
-		$maxitems = $rss->get_item_quantity( 5 );
-
-		// Build an array of all the items, starting with element 0 (first element).
-		$rss_items = $rss->get_items( 0, $maxitems );
-
-	endif;
-	?>
-
-	<ul>
-		<?php if ( $maxitems == 0 ) : ?>
-			<li><?php _e( 'No items', 'my-text-domain' ); ?></li>
-		<?php else : ?>
-			<?php // Loop through each feed item and display each item as a hyperlink. ?>
-			<?php foreach ( $rss_items as $item ) : ?>
-				<li>
-					<a href="<?php echo esc_url( $item->get_permalink() ); ?>"
-					   title="<?php printf( __( 'Posted %s', 'my-text-domain' ), $item->get_date('j F Y | g:i a') ); ?>">
-						<?php echo esc_html( $item->get_title() ); ?>
-					</a>
-				</li>
-			<?php endforeach; ?>
-		<?php endif; ?>
-	</ul>
-	<?php
-}
-
 function rss_transient_func( $atts ){
 
 	// Do we have this information in our transients already?
@@ -61,11 +22,43 @@ function rss_transient_func( $atts ){
 	// Nope!  We gotta make a call.
 	} else {
 
-		$rssdata = get_external_rss_data() ;
+		// Get RSS Feed(s)
+		include_once( ABSPATH . WPINC . '/feed.php' );
 
-		set_transient( 'tna_rss_transient', $rssdata, MINUTE_IN_SECONDS );
+		// Get a SimplePie feed object from the specified feed source.
+		$url = 'http://blog.nationalarchives.gov.uk/feed/';
+		$rss = fetch_feed( $url );
 
-		return $rssdata;
+		$maxitems = 0;
+
+		if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
+
+			// Figure out how many total items there are and then limit it.
+			$maxitems = $rss->get_item_quantity( 10 );
+
+			// Build an array of all the items, starting with element 0 (first element).
+			$rss_items = $rss->get_items( 0, $maxitems );
+
+		endif;
+
+		$html .= '<ul>';
+		if ( $maxitems == 0 ) :
+			$html .= '<li>' . _e( 'No items', 'my-text-domain' ) . '</li>';
+		else :
+			// Loop through each feed item and display each item as a hyperlink
+			foreach ( $rss_items as $item ) :
+				$html .= '<li>';
+				$html .= '<a href="' . esc_url( $item->get_permalink() ) . '">' . esc_html( $item->get_title() ) . '</a>';
+				$html .= '</li>';
+			endforeach;
+		endif;
+		$html .= '</ul>';
+
+		set_transient( 'tna_rss_transient', $html, MINUTE_IN_SECONDS );
+
+		$html .= '<p>This is not the stored data</p>';
+
+		return $html;
 
 	}
 }
