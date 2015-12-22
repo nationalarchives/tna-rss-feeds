@@ -17,7 +17,7 @@ function rss_transient_func( $atts ){
 	// Yep!  Just return it and we're done.
 	if( ! empty( $transient ) ) {
 
-		return $transient;
+		return $transient . '<p>This is the transient stored data</p>';
 
 	// Nope!  We gotta make a call.
 	} else {
