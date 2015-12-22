@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: TNA RSS Feeds
- * Plugin URI:
- * Description: TBA
+ * Plugin URI: https://github.com/nationalarchives/tna-rss-feeds
+ * Description: Test - Displays RSS feeds via a shortcode
  * Version: 1.0.0
  * Author: Chris Bishop
  * Author URI: https://github.com/nationalarchives
