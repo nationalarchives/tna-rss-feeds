@@ -34,7 +34,7 @@ function rss_transient_func( $atts ){
 		if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
 
 			// Figure out how many total items there are and then limit it.
-			$maxitems = $rss->get_item_quantity( 10 );
+			$maxitems = $rss->get_item_quantity( 6 );
 
 			// Build an array of all the items, starting with element 0 (first element).
 			$rss_items = $rss->get_items( 0, $maxitems );
@@ -48,7 +48,9 @@ function rss_transient_func( $atts ){
 			// Loop through each feed item and display each item as a hyperlink
 			foreach ( $rss_items as $item ) :
 				$html .= '<li>';
-				$html .= '<a href="' . esc_url( $item->get_permalink() ) . '">' . esc_html( $item->get_title() ) . '</a>';
+				$html .= '<a href="' . esc_url( $item->get_permalink() ) . '">';
+				$html .= '<h3>' . esc_html( $item->get_title() ) . '</h3>';
+				$html .= '</a>';
 				$html .= '</li>';
 			endforeach;
 		endif;
