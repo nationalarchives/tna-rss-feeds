@@ -48,9 +48,13 @@ function rss_transient_func( $atts ){
 			// Loop through each feed item and display each item as a hyperlink
 			foreach ( $rss_items as $item ) :
 				$html .= '<li>';
+				if ($enclosure = $item->get_enclosure()) {
+					$html .= '<img src="' .  $enclosure->get_link() . '" width="300">';
+				}
 				$html .= '<a href="' . esc_url( $item->get_permalink() ) . '">';
 				$html .= '<h3>' . esc_html( $item->get_title() ) . '</h3>';
 				$html .= '</a>';
+				$html .= '<p>' . esc_html( $item->get_description() ) . '</p>';
 				$html .= '</li>';
 			endforeach;
 		endif;
