@@ -60,6 +60,14 @@ function rss_transient_func( $atts ){
 		endif;
 		$html .= '</ul>';
 
+		$html .= '<p>get_template_directory_uri: ' . get_template_directory_uri() . '</p>';
+
+		$html .= '<p>get_stylesheet_directory_uri: ' . get_stylesheet_directory_uri() . '</p>';
+
+		$html .= '<p>network_site_url: ' . network_site_url() . '</p>';
+
+		$html .= '<p>get_theme_root_uri: ' . get_theme_root_uri() . '</p>';
+
 		set_transient( 'tna_rss_transient', $html, MINUTE_IN_SECONDS );
 
 		$html .= '<p>This is not the stored data</p>';
