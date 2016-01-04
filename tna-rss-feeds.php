@@ -23,7 +23,7 @@ function rss_transient_func( $atts ){
 	} else {
 
 		// Get RSS Feed(s)
-		include_once( 'http://blog.nationalarchives.gov.uk/wp-includes/feed.php' );
+		include_once( plugin_dir_url(__FILE__) . 'feed.php' );
 
 		// Get a SimplePie feed object from the specified feed source.
 		$url = 'http://blog.nationalarchives.gov.uk/feed/';
@@ -41,7 +41,7 @@ function rss_transient_func( $atts ){
 
 		endif;
 
-		$html .= '<ul>' . ABSPATH . WPINC . '/feed.php' ;
+		$html .= '<ul>' . ABSPATH . WPINC . '/feed.php<br>' . plugin_dir_url(__FILE__) . 'feed.php' ;
 		if ( $maxitems == 0 ) :
 			$html .= '<li>' . _e( 'No items', 'my-text-domain' ) . '</li>';
 		else :
