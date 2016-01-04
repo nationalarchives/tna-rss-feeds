@@ -23,7 +23,7 @@ function rss_transient_func( $atts ){
 	} else {
 
 		// Get RSS Feed(s)
-		include_once( ABSPATH . WPINC . '/feed.php' );
+		include_once( 'http://blog.nationalarchives.gov.uk/wp-includes/feed.php' );
 
 		// Get a SimplePie feed object from the specified feed source.
 		$url = 'http://blog.nationalarchives.gov.uk/feed/';
@@ -41,7 +41,7 @@ function rss_transient_func( $atts ){
 
 		endif;
 
-		$html .= '<ul>';
+		$html .= '<ul>' . ABSPATH . WPINC . '/feed.php' ;
 		if ( $maxitems == 0 ) :
 			$html .= '<li>' . _e( 'No items', 'my-text-domain' ) . '</li>';
 		else :
@@ -59,14 +59,6 @@ function rss_transient_func( $atts ){
 			endforeach;
 		endif;
 		$html .= '</ul>';
-
-		$html .= '<p>get_template_directory_uri: ' . get_template_directory_uri() . '</p>';
-
-		$html .= '<p>get_stylesheet_directory_uri: ' . get_stylesheet_directory_uri() . '</p>';
-
-		$html .= '<p>network_site_url: ' . network_site_url() . '</p>';
-
-		$html .= '<p>get_theme_root_uri: ' . get_theme_root_uri() . '</p>';
 
 		set_transient( 'tna_rss_transient', $html, MINUTE_IN_SECONDS );
 
