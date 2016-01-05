@@ -17,7 +17,6 @@ function tna_rss_css()
 		wp_enqueue_style('tna-rss-styles');
 	}
 }
-
 add_action('wp_enqueue_scripts', 'tna_rss_css');
 
 function rss_transient_func( $atts ){
@@ -66,31 +65,6 @@ function rss_transient_func( $atts ){
 
 	}
 }
-
 add_shortcode( 'tna-rss', 'rss_transient_func' );
-
-function rss_alt_func( $atts ){
-	function getFeed($feed_url) {
-
-		$content = file_get_contents($feed_url);
-		$x = new SimpleXmlElement($content);
-
-		echo "<ul>";
-
-		foreach($x->channel->item as $item) {
-			echo "<li>";
-			echo "<h3><a href='$item->link' title='$item->title'>" . $item->title . "</a></h3>";
-			echo "<p>" . $item->description . "</p>";
-			if ($enclosure = $item->enclosure['url']) {
-				echo "<img src='$enclosure' title='$item->title'>";
-			}
-			echo "</li>";
-		}
-		echo "</ul>";
-	}
-	getFeed('http://blog.nationalarchives.gov.uk/feed/');
-}
-
-add_shortcode( 'tna-alt-php', 'rss_alt_func' );
 
 ?>
