@@ -41,7 +41,7 @@ function rss_transient_func( $atts ){
 		// Get feed source.
 		$content = file_get_contents($url);
 		$x = new SimpleXmlElement($content);
-		
+
 		$n = 0 ;
 		$html .= '<div class="tna-rss"><ul>' ;
 
