@@ -23,7 +23,7 @@ function rss_transient_func( $atts ){
 	} else {
 
 		// Get RSS Feed(s)
-		include_once( plugin_dir_url(__FILE__) . 'feed.php' );
+		include_once( ABSPATH . WPINC . '/feed.php' );
 
 		// Get a SimplePie feed object from the specified feed source.
 		$url = 'http://blog.nationalarchives.gov.uk/feed/';
@@ -41,7 +41,7 @@ function rss_transient_func( $atts ){
 
 		endif;
 
-		$html .= '<ul>' . ABSPATH . WPINC . '/feed.php<br>' . plugin_dir_url(__FILE__) . 'feed.php' ;
+		$html .= '<ul>' ;
 		if ( $maxitems == 0 ) :
 			$html .= '<li>' . _e( 'No items', 'my-text-domain' ) . '</li>';
 		else :
@@ -70,5 +70,19 @@ function rss_transient_func( $atts ){
 }
 
 add_shortcode( 'tna-rss', 'rss_transient_func' );
+
+function tna_rss_js() {
+	wp_register_script('rss-script', plugin_dir_url(__FILE__) . 'tna-rss-feeds.js');
+	if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'tna-rss-js')) {
+		wp_enqueue_script('rss-script', '', '', '', true);
+	}
+}
+add_action('wp_enqueue_scripts', 'tna_rss_js');
+
+function rss_js_func( $atts ){
+
+}
+
+add_shortcode( 'tna-rss-js', 'rss_js_func' );
 
 ?>
