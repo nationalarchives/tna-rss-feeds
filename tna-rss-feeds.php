@@ -9,6 +9,17 @@
  * License: GPL2
  */
 
+function tna_rss_css()
+{
+	wp_register_style('tna-rss-styles', plugin_dir_url(__FILE__) . 'tna-rss-feeds.css', '', '1.0', 'all');
+	global $post;
+	if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'tna-rss')) {
+		wp_enqueue_style('tna-rss-styles');
+	}
+}
+
+add_action('wp_enqueue_scripts', 'tna_rss_css');
+
 function rss_transient_func( $atts ){
 
 	// Do we have this information in our transients already?
@@ -22,43 +33,30 @@ function rss_transient_func( $atts ){
 	// Nope!  We gotta make a call.
 	} else {
 
-		// Get RSS Feed(s)
-		include_once( ABSPATH . WPINC . '/feed.php' );
+		// Get feed source.
+		$content = file_get_contents('http://blog.nationalarchives.gov.uk/feed/');
+		$x = new SimpleXmlElement($content);
 
-		// Get a SimplePie feed object from the specified feed source.
-		$url = 'http://blog.nationalarchives.gov.uk/feed/';
-		$rss = fetch_feed( $url );
-
-		$maxitems = 0;
-
-		if ( ! is_wp_error( $rss ) ) : // Checks that the object is created correctly
-
-			// Figure out how many total items there are and then limit it.
-			$maxitems = $rss->get_item_quantity( 3 );
-
-			// Build an array of all the items, starting with element 0 (first element).
-			$rss_items = $rss->get_items( 0, $maxitems );
-
-		endif;
-
-		$html .= '<ul>' ;
-		if ( $maxitems == 0 ) :
-			$html .= '<li>' . _e( 'No items', 'my-text-domain' ) . '</li>';
-		else :
+		$html .= '<div class="tna-rss"><ul>' ;
+		$n = 0 ;
 			// Loop through each feed item and display each item as a hyperlink
-			foreach ( $rss_items as $item ) :
-				$html .= '<li>';
-				if ($enclosure = $item->get_enclosure()) {
-					$html .= '<img src="' .  $enclosure->get_link() . '" width="300">';
+			foreach ( $x->channel->item as $item ) :
+				if ( $n == 6 ) {
+					break;
 				}
-				$html .= '<a href="' . esc_url( $item->get_permalink() ) . '">';
-				$html .= '<h3>' . esc_html( $item->get_title() ) . '</h3>';
+				$html .= '<li class="clr">';
+				if ($enclosure = $item->enclosure['url']) {
+					$html .= '<div class="tna-rss-thumb"><img src="' .  $enclosure . '"></div>';
+				}
+				$html .= '<div class="tna-rss-entry"><a href="' . $item->link . '">';
+				$html .= '<h3>' . $item->title . '</h3>';
 				$html .= '</a>';
-				$html .= '<p>' . esc_html( $item->get_description() ) . '</p>';
+				$html .= '<p>' . $item->description . '</p></div>';
 				$html .= '</li>';
+				$n++ ;
 			endforeach;
-		endif;
-		$html .= '</ul>';
+
+		$html .= '</ul></div>';
 
 		set_transient( 'tna_rss_transient', $html, MINUTE_IN_SECONDS );
 
@@ -70,21 +68,6 @@ function rss_transient_func( $atts ){
 }
 
 add_shortcode( 'tna-rss', 'rss_transient_func' );
-
-function tna_rss_js() {
-	wp_register_script('rss-script', plugin_dir_url(__FILE__) . 'tna-rss-feeds.js');
-	global $post;
-	if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'tna-rss-js')) {
-		wp_enqueue_script('rss-script', '', '', '', true);
-	}
-}
-add_action('wp_enqueue_scripts', 'tna_rss_js');
-
-function rss_js_func( $atts ){
-	echo 'test';
-}
-
-add_shortcode( 'tna-rss-js', 'rss_js_func' );
 
 function rss_alt_func( $atts ){
 	function getFeed($feed_url) {
