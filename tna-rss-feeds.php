@@ -32,8 +32,13 @@ function rss_transient_func( $atts ){
 	// Nope!  We gotta make a call.
 	} else {
 
+		// Shortcode atts.
+		extract(shortcode_atts(array(
+			'url' => 'http://blog.nationalarchives.gov.uk/feed/',
+		), $atts));
+
 		// Get feed source.
-		$content = file_get_contents('http://blog.nationalarchives.gov.uk/feed/');
+		$content = file_get_contents($url);
 		$x = new SimpleXmlElement($content);
 
 		$html .= '<div class="tna-rss"><ul>' ;
