@@ -46,7 +46,7 @@ function rss_transient_func( $atts ){
 				}
 				$html .= '<li class="clr">';
 				if ($enclosure = $item->enclosure['url']) {
-					$html .= '<div class="tna-rss-thumb"><img src="' .  $enclosure . '"></div>';
+					$html .= '<div class="tna-rss-thumb"><a href="' . $item->link . '"><img src="' .  $enclosure . '"></a></div>';
 				}
 				$html .= '<div class="tna-rss-entry"><a href="' . $item->link . '">';
 				$html .= '<h3>' . $item->title . '</h3>';
