@@ -74,4 +74,50 @@ function rss_transient_func( $atts ){
 }
 add_shortcode( 'tna-rss', 'rss_transient_func' );
 
+function tna_rss_blog() {
+	// Do we have this information in our transients already?
+	$transient = get_transient( 'tna_rss_blog_transient' );
+
+	// Yep!  Just return it and we're done.
+	if( ! empty( $transient ) ) {
+
+		echo $transient . '<p>This is the transient stored data</p>';
+
+		// Nope!  We gotta make a call.
+	} else {
+		// Get feed source.
+		$content = file_get_contents( 'http://blog.nationalarchives.gov.uk/feed/' );
+		$x       = new SimpleXmlElement( $content );
+		$n       = 0;
+		// Loop through each feed item and display each item as a hyperlink
+		foreach ( $x->channel->item as $item ) :
+			if ( $n == 1 ) {
+				break;
+			}
+			$enclosure = $item->enclosure['url'];
+			//Use that namespace
+			$namespaces = $item->getNameSpaces(true);
+			//Now we don't have the URL hard-coded
+			$dc = $item->children($namespaces['dc']);
+			$pubDate = $item->pubDate;
+			$pubDate = date("D, d M Y", strtotime($pubDate));
+			$html .= '<a href="http://blog.nationalarchives.gov.uk/" title="Latest blog post">';
+			$html .= '<div class="image-container" style="background-image: url(' . $enclosure . ')">';
+			$html .= '<h2><span><span>Read our latest blog posts</span></span></h2>';
+			$html .= '</div>';
+			$html .= '</a>';
+			$html .= '<div class="clr">';
+			$html .= '<div class="tna-rss-entry"><a href="' . $item->link . '">';
+			$html .= '<h3>' . $item->title . '</h3>';
+			$html .= '</a>';
+			$html .= '<div class="entry-meta">' . $dc->creator . '|' . $pubDate . '</div>';
+			$html .= '<p>' . $item->description . '</p></div>';
+			$html .= '</div>';
+			$n ++;
+		endforeach;
+		set_transient( 'tna_rss_blog_transient', $html, MINUTE_IN_SECONDS );
+		echo $html;
+	}
+}
+
 ?>
