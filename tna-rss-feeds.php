@@ -79,7 +79,7 @@ function tna_rss( $rssUrl, $url, $rssTitle, $image, $id ) {
 	$transient = get_transient( 'tna_rss_blog_transient' . $id );
 	// Yep!  Just return it and we're done.
 	if( ! empty( $transient ) ) {
-		echo $transient . 'TRANSIENT';
+		echo $transient ;
 		// Nope!  We gotta make a call.
 	} else {
 		// Get feed source.
