@@ -7,7 +7,11 @@ Use shortcode :
 [tna-rss] or [tna-rss url='http://blog.nationalarchives.gov.uk/feed/' number=9]
 
 For PHP usage :
-
+```
 <?php tna_rss ( $rssUrl, $url, $rssTitle, $image, $id ) ?>
+```
 
-eg. <?php tna_rss ( 'http://blog.nationalarchives.gov.uk/feed/', 'http://blog.nationalarchives.gov.uk/', 'Our blo', 'yes', 'home-1' ) ?>
+eg.
+```
+<?php tna_rss ( 'http://blog.nationalarchives.gov.uk/feed/', 'http://blog.nationalarchives.gov.uk/', 'Our blo', 'yes', 'home-1' ) ?>
+```
