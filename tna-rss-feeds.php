@@ -79,7 +79,7 @@ function tna_rss( $rssUrl, $url, $rssTitle, $image, $id ) {
 	$transient = get_transient( 'tna_rss_blog_transient' . $id );
 	// Yep!  Just return it and we're done.
 	if( ! empty( $transient ) ) {
-		echo $transient . 'TRANSIENT';
+		echo $transient ;
 		// Nope!  We gotta make a call.
 	} else {
 		// Get feed source.
@@ -98,7 +98,7 @@ function tna_rss( $rssUrl, $url, $rssTitle, $image, $id ) {
 				$pubDate    = $item->pubDate;
 				$pubDate    = date( "D, d M Y", strtotime( $pubDate ) );
 				if ( ! $image == 'no' ) {
-					$html .= '<a href="' . $url . '" title=' . $rssTitle . '>';
+					$html .= '<a href="' . $url . '" title="' . $rssTitle . '"">';
 					$html .= '<div class="image-container" style="background-image: url(' . $enclosure . ')">';
 					$html .= '<h2><span><span>' . $rssTitle . '</span></span></h2>';
 					$html .= '</div>';
@@ -113,7 +113,7 @@ function tna_rss( $rssUrl, $url, $rssTitle, $image, $id ) {
 				$html .= '</div>';
 				$n ++;
 			endforeach;
-			set_transient( 'tna_rss_blog_transient' . $id, $html, 6 * HOUR_IN_SECONDS );
+			set_transient( 'tna_rss_blog_transient' . $id, $html, HOUR_IN_SECONDS );
 			echo $html;
 		}
 		else {
