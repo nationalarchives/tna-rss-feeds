@@ -1,0 +1,30 @@
+.tna-rss ul {
+    margin: 0;
+    padding: 0;
+}
+.tna-rss ul li {
+    list-style: none;
+    clear: both;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #ddd;
+}
+.tna-rss ul li h3 {
+    margin-top: 0;
+}
+.tna-rss-thumb {
+    position: relative;
+    float: left;
+    width: 30%;
+    height: 140px;
+    margin-right: 3%;
+    overflow: hidden;
+}
+.tna-rss-thumb img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+.tna-rss-entry {
+    float: left;
+    width: 66%;
+}
