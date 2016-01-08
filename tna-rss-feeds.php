@@ -98,7 +98,7 @@ function tna_rss( $rssUrl, $url, $rssTitle, $image, $id ) {
 				$pubDate    = $item->pubDate;
 				$pubDate    = date( "D, d M Y", strtotime( $pubDate ) );
 				if ( ! $image == 'no' ) {
-					$html .= '<a href="' . $url . '" title=' . $rssTitle . '>';
+					$html .= '<a href="' . $url . '" title="' . $rssTitle . '"">';
 					$html .= '<div class="image-container" style="background-image: url(' . $enclosure . ')">';
 					$html .= '<h2><span><span>' . $rssTitle . '</span></span></h2>';
 					$html .= '</div>';
