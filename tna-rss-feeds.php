@@ -113,7 +113,7 @@ function tna_rss( $rssUrl, $url, $rssTitle, $image, $id ) {
 				$html .= '</div>';
 				$n ++;
 			endforeach;
-			set_transient( 'tna_rss_blog_transient' . $id, $html, 6 * HOUR_IN_SECONDS );
+			set_transient( 'tna_rss_blog_transient' . $id, $html, HOUR_IN_SECONDS );
 			echo $html;
 		}
 		else {
